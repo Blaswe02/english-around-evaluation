@@ -41,14 +41,23 @@ export default function CountryEvaluation({
   })
 
   const [expanded, setExpanded] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const jaar = formData.jaar as keyof typeof COUNTRIES
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    setSaveError(null)
+
     if (!formData.land || !formData.jaar) {
-      alert('Selecteer land en jaar')
+      setSaveError('Selecteer land en jaar')
       return
     }
+
+    if (!formData.niveaus || formData.niveaus.length === 0) {
+      setSaveError('Selecteer minstens één niveau')
+      return
+    }
+
     onSubmit(formData as EvaluationRecord)
   }
 
@@ -275,6 +284,13 @@ export default function CountryEvaluation({
             </div>
           )}
         </div>
+
+        {/* Error Message */}
+        {saveError && (
+          <div className="bg-red-50 border border-red-200 rounded p-3 text-red-700 text-sm">
+            {saveError}
+          </div>
+        )}
 
         {/* Buttons */}
         <div className="flex gap-3 pt-4">
