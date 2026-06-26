@@ -49,33 +49,23 @@ export default function AdminDashboard() {
 
   const handleExportAll = () => {
     const csv = [
-      ['Docent', 'Email', 'Land', 'Jaar', 'Niveaus', 'General Info', 'History', 'Well-known People', 'Landmarks', 'Culture', 'Flora/Fauna', 'Waarom waardevol', 'Best key terms', 'Terms to remove', 'Waarom verwijderen', 'Vervanging', 'Nieuwe term', 'Meest engaging', 'Best onthouden', 'Meest vergeten', 'Niveau fit', 'Te makkelijk/moeilijk', 'Leerlingen tegenaan', 'Docent tegenaan', 'Verandering'],
+      ['Docent', 'Email', 'Land', 'Jaar', 'Niveaus', 'Hoe waardevol', 'Leukste onderdelen', 'Succesvolle concepten', 'Key term eruit', 'Waarom eruit', 'Vervanging voorstel', 'Niveau handout', 'Onderdelen makkelijk/moeilijk', 'Docent tegenaan', 'Extra opmerkingen'],
       ...evaluations.map(evaluation => [
         evaluation.docent_name,
         evaluation.docent_email,
         evaluation.land,
         evaluation.jaar,
         evaluation.niveaus?.join('; ') || '',
-        evaluation.ratings?.general_information || '',
-        evaluation.ratings?.history || '',
-        evaluation.ratings?.well_known_people || '',
-        evaluation.ratings?.landmarks || '',
-        evaluation.ratings?.culture || '',
-        evaluation.ratings?.flora_fauna || '',
-        evaluation.why_valuable || '',
-        evaluation.best_key_term || '',
-        evaluation.terms_to_remove || '',
-        evaluation.why_remove || '',
-        evaluation.replacement_suggestion || '',
-        evaluation.new_term || '',
-        evaluation.most_engaging_term || '',
-        evaluation.best_remembered_term || '',
-        evaluation.most_forgotten_term || '',
-        evaluation.level_fit || '',
-        evaluation.too_easy_hard || '',
-        evaluation.student_difficulties || '',
-        evaluation.teacher_difficulties || '',
-        evaluation.one_change || '',
+        evaluation.waardevol_onderdelen || '',
+        evaluation.best_parts?.join('; ') || '',
+        evaluation.succesvolle_concepten || '',
+        evaluation.key_term_eruit || '',
+        evaluation.waarom_eruit || '',
+        evaluation.vervanging_voorstel || '',
+        evaluation.niveau_handout || '',
+        Object.entries(evaluation.onderdelen_makkelijk_moeilijk || {}).map(([k, v]) => `${k}: ${v}`).join('; ') || '',
+        evaluation.docent_tegenaan || '',
+        evaluation.extra_opmerkingen || '',
       ])
     ]
 
@@ -156,20 +146,16 @@ export default function AdminDashboard() {
 
           // Tekstvelden
           const textFields = [
-            { label: 'Waarom waardevol?', value: evaluation.why_valuable },
-            { label: 'Best key terms:', value: evaluation.best_key_term },
-            { label: 'Terms to remove:', value: evaluation.terms_to_remove },
-            { label: 'Waarom verwijderen?', value: evaluation.why_remove },
-            { label: 'Vervanging voorstel:', value: evaluation.replacement_suggestion },
-            { label: 'Nieuwe term:', value: evaluation.new_term },
-            { label: 'Meest interessant:', value: evaluation.most_engaging_term },
-            { label: 'Best onthouden:', value: evaluation.best_remembered_term },
-            { label: 'Meest vergeten:', value: evaluation.most_forgotten_term },
-            { label: 'Niveau fit (1-5):', value: evaluation.level_fit?.toString() },
-            { label: 'Te makkelijk/moeilijk?', value: evaluation.too_easy_hard },
-            { label: 'Leerlingen tegenaan:', value: evaluation.student_difficulties },
-            { label: 'Docent tegenaan:', value: evaluation.teacher_difficulties },
-            { label: 'Verandering morgen:', value: evaluation.one_change },
+            { label: 'Hoe waardevol vond je deze onderdelen?', value: evaluation.waardevol_onderdelen },
+            { label: 'Welke onderdelen vond je het leukst (ranking):', value: evaluation.best_parts?.join('; ') },
+            { label: 'Succesvolle concepten:', value: evaluation.succesvolle_concepten },
+            { label: 'Welke key term eruit?', value: evaluation.key_term_eruit },
+            { label: 'Waarom aangepast/verwijderd?', value: evaluation.waarom_eruit },
+            { label: 'Vervanging voorstel:', value: evaluation.vervanging_voorstel },
+            { label: 'Niveau handout (1-5):', value: evaluation.niveau_handout?.toString() },
+            { label: 'Onderdelen makkelijk/moeilijk:', value: Object.entries(evaluation.onderdelen_makkelijk_moeilijk || {}).map(([k, v]) => `${k}: ${v}`).join('; ') },
+            { label: 'Waar liep jij als docent tegenaan?', value: evaluation.docent_tegenaan },
+            { label: 'Extra opmerkingen:', value: evaluation.extra_opmerkingen },
           ]
 
           textFields.forEach(({ label, value }) => {
@@ -270,20 +256,16 @@ export default function AdminDashboard() {
 
         // Tekstvelden
         const textFields = [
-          { label: 'Waarom waardevol?', value: evaluation.why_valuable },
-          { label: 'Best key terms:', value: evaluation.best_key_term },
-          { label: 'Terms to remove:', value: evaluation.terms_to_remove },
-          { label: 'Waarom verwijderen?', value: evaluation.why_remove },
-          { label: 'Vervanging voorstel:', value: evaluation.replacement_suggestion },
-          { label: 'Nieuwe term:', value: evaluation.new_term },
-          { label: 'Meest interessant:', value: evaluation.most_engaging_term },
-          { label: 'Best onthouden:', value: evaluation.best_remembered_term },
-          { label: 'Meest vergeten:', value: evaluation.most_forgotten_term },
-          { label: 'Niveau fit (1-5):', value: evaluation.level_fit?.toString() },
-          { label: 'Te makkelijk/moeilijk?', value: evaluation.too_easy_hard },
-          { label: 'Leerlingen tegenaan:', value: evaluation.student_difficulties },
-          { label: 'Docent tegenaan:', value: evaluation.teacher_difficulties },
-          { label: 'Verandering morgen:', value: evaluation.one_change },
+          { label: 'Hoe waardevol vond je deze onderdelen?', value: evaluation.waardevol_onderdelen },
+          { label: 'Welke onderdelen vond je het leukst (ranking):', value: evaluation.best_parts?.join('; ') },
+          { label: 'Succesvolle concepten:', value: evaluation.succesvolle_concepten },
+          { label: 'Welke key term eruit?', value: evaluation.key_term_eruit },
+          { label: 'Waarom aangepast/verwijderd?', value: evaluation.waarom_eruit },
+          { label: 'Vervanging voorstel:', value: evaluation.vervanging_voorstel },
+          { label: 'Niveau handout (1-5):', value: evaluation.niveau_handout?.toString() },
+          { label: 'Onderdelen makkelijk/moeilijk:', value: Object.entries(evaluation.onderdelen_makkelijk_moeilijk || {}).map(([k, v]) => `${k}: ${v}`).join('; ') },
+          { label: 'Waar liep jij als docent tegenaan?', value: evaluation.docent_tegenaan },
+          { label: 'Extra opmerkingen:', value: evaluation.extra_opmerkingen },
         ]
 
         textFields.forEach(({ label, value }) => {
