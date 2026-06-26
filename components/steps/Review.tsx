@@ -78,9 +78,18 @@ export default function Review({
               { key: 'culture', label: 'Culture' },
               { key: 'flora_fauna', label: 'Flora/Fauna' },
             ].map(({ key, label }) => {
-              const avg = evaluations.length > 0
-                ? (evaluations.reduce((sum, e) => sum + (e.ratings?.[key as keyof typeof e.ratings] || 0), 0) / evaluations.length).toFixed(1)
-                : 0
+              let total = 0
+              let count = 0
+              evaluations.forEach(e => {
+                const ratingObj = (e.ratings as any)?.[key]
+                if (ratingObj && typeof ratingObj === 'object') {
+                  Object.values(ratingObj).forEach(val => {
+                    total += (val as number) || 0
+                    count += 1
+                  })
+                }
+              })
+              const avg = count > 0 ? (total / count).toFixed(1) : 0
               return (
                 <div key={key}>
                   <p className="text-gray-600">{label}</p>

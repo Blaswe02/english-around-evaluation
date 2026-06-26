@@ -20,25 +20,30 @@ export default function Wizard() {
     setStep('country')
   }
 
-  const handleEvaluationSubmit = async (evaluationData: EvaluationRecord) => {
+  const handleEvaluationSubmit = (evaluationData: EvaluationRecord) => {
+    // Add to local state (NOT to database yet)
+    const updatedEvaluations = [...evaluations, evaluationData]
+    setEvaluations(updatedEvaluations)
+    setCurrentEvaluation(null)
+    // Show success message
+    alert(`✓ ${evaluationData.land} (${evaluationData.jaar}) toegevoegd!\n\nTotaal: ${updatedEvaluations.length} evaluatie(s)`)
+  }
+
+  const handleFinalSubmit = async () => {
     setLoading(true)
     try {
-      await saveEvaluation({
-        ...evaluationData,
-        docent_name: docent.name,
-        docent_email: docent.email,
-      })
-
-      setEvaluations([...evaluations, evaluationData])
-      setCurrentEvaluation(null)
-      // Ask if more evaluations
-      const continueEval = confirm('Wil je nog meer landen evalueren?')
-      if (!continueEval) {
-        setStep('review')
+      // Save all evaluations to database
+      for (const evaluation of evaluations) {
+        await saveEvaluation({
+          ...evaluation,
+          docent_name: docent.name,
+          docent_email: docent.email,
+        })
       }
+      setStep('review')
     } catch (error) {
-      console.error('Error saving evaluation:', error)
-      alert('Fout bij opslaan. Probeer opnieuw.')
+      console.error('Error saving evaluations:', error)
+      alert('Fout bij inzenden. Probeer opnieuw.')
     } finally {
       setLoading(false)
     }
@@ -48,25 +53,23 @@ export default function Wizard() {
     if (evaluations.length === 0) return
 
     const csv = [
-      ['Docent', 'Email', 'Land', 'Jaar', 'Niveaus', 'General Info', 'History', 'Well-known People', 'Landmarks', 'Culture', 'Flora/Fauna', 'Waarom waardevol', 'Meest engaging term', 'Best remembered', 'Most forgotten', 'Niveau fit', 'One change'],
+      ['Docent', 'Email', 'Land', 'Jaar', 'Niveaus', 'Waardevol onderdelen', 'Leukste onderdelen', 'Succesvolle concepten', 'Key term eruit', 'Waarom eruit', 'Vervanging voorstel', 'Niveau handout', 'Onderdelen makkelijk/moeilijk', 'Docent tegenaan', 'Extra opmerkingen'],
       ...evaluations.map(e => [
         docent.name,
         docent.email,
         e.land,
         e.jaar,
         e.niveaus?.join('; ') || '',
-        e.ratings?.general_information || '',
-        e.ratings?.history || '',
-        e.ratings?.well_known_people || '',
-        e.ratings?.landmarks || '',
-        e.ratings?.culture || '',
-        e.ratings?.flora_fauna || '',
-        e.why_valuable || '',
-        e.most_engaging_term || '',
-        e.best_remembered_term || '',
-        e.most_forgotten_term || '',
-        e.level_fit || '',
-        e.one_change || '',
+        e.waardevol_onderdelen || '',
+        e.best_parts?.join('; ') || '',
+        e.succesvolle_concepten || '',
+        e.key_term_eruit || '',
+        e.waarom_eruit || '',
+        e.vervanging_voorstel || '',
+        e.niveau_handout || '',
+        Object.entries(e.onderdelen_makkelijk_moeilijk || {}).map(([k, v]) => `${k}: ${v}`).join('; ') || '',
+        e.docent_tegenaan || '',
+        e.extra_opmerkingen || '',
       ])
     ]
 
@@ -88,6 +91,7 @@ export default function Wizard() {
         {step === 'country' && (
           <CountryEvaluation
             onSubmit={handleEvaluationSubmit}
+            onFinalSubmit={handleFinalSubmit}
             onBack={() => setStep('docent')}
             loading={loading}
             evaluationCount={evaluations.length}

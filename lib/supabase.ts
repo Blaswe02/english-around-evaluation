@@ -20,28 +20,30 @@ export interface EvaluationRecord {
   land: string
   jaar: string
   niveaus: string[]
-  ratings?: {
-    general_information?: number
-    history?: number
-    well_known_people?: number
-    landmarks?: number
-    culture?: number
-    flora_fauna?: number
-  }
+  waardevol_onderdelen?: string
   best_parts: string[]
-  why_valuable: string
-  best_key_term: string
-  terms_to_remove: string
-  why_remove: string
-  replacement_suggestion: string
-  new_term: string
-  most_engaging_term: string
-  best_remembered_term: string
-  most_forgotten_term: string
-  level_fit: number
-  too_easy_hard: string
-  student_difficulties: string
-  teacher_difficulties: string
-  one_change: string
+  succesvolle_concepten?: string
+  key_term_eruit?: string
+  waarom_eruit?: string
+  vervanging_voorstel?: string
+  niveau_handout?: number
+  onderdelen_makkelijk_moeilijk?: { [niveau: string]: string }
+  docent_tegenaan?: string
+  extra_opmerkingen?: string
   created_at?: string
+  ratings?: any
+  why_valuable?: any
+  best_key_term?: any
+  terms_to_remove?: any
+  why_remove?: any
+  replacement_suggestion?: any
+  new_term?: any
+  most_engaging_term?: any
+  best_remembered_term?: any
+  most_forgotten_term?: any
+  level_fit?: any
+  too_easy_hard?: any
+  student_difficulties?: any
+  teacher_difficulties?: any
+  one_change?: any
 }
