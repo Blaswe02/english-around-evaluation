@@ -269,6 +269,42 @@ export default function CountryEvaluation({
           </div>
         </div>
 
+        {/* Ratings per content area */}
+        <div className="border-l-4 border-blue-500 bg-blue-50 p-4">
+          <label className="block text-sm font-medium text-gray-700 mb-4">
+            Hoe waardevol zijn deze onderdelen voor je lessen? (1-5) *
+          </label>
+          <div className="space-y-4">
+            {CONTENT_AREAS.map(area => (
+              <div key={area}>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-sm text-gray-700">{area}</label>
+                  <span className="text-sm font-medium text-blue-600">
+                    {formData.ratings?.[area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')] || 3}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={formData.ratings?.[area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')] || 3}
+                  onChange={(e) => {
+                    const key = area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')
+                    setFormData({
+                      ...formData,
+                      ratings: {
+                        ...formData.ratings,
+                        [key]: parseInt(e.target.value),
+                      },
+                    })
+                  }}
+                  className="w-full"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Leukste onderdelen - Drag & Drop Ranking */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
