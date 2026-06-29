@@ -275,21 +275,27 @@ export default function CountryEvaluation({
             Hoe waardevol zijn deze onderdelen voor je lessen? (1-5) *
           </label>
           <div className="space-y-4">
-            {CONTENT_AREAS.map(area => (
-              <div key={area}>
+            {[
+              { label: 'General Information', key: 'general_information' },
+              { label: 'History', key: 'history' },
+              { label: 'Well-known People', key: 'well_known_people' },
+              { label: 'Landmarks', key: 'landmarks' },
+              { label: 'Culture', key: 'culture' },
+              { label: 'Flora/Fauna/Landscapes', key: 'flora_fauna' },
+            ].map(({ label, key }) => (
+              <div key={key}>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm text-gray-700">{area}</label>
+                  <label className="text-sm text-gray-700">{label}</label>
                   <span className="text-sm font-medium text-blue-600">
-                    {formData.ratings?.[area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')] || 3}
+                    {formData.ratings?.[key] || 3}/5
                   </span>
                 </div>
                 <input
                   type="range"
                   min="1"
                   max="5"
-                  value={formData.ratings?.[area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')] || 3}
+                  value={formData.ratings?.[key] || 3}
                   onChange={(e) => {
-                    const key = area.toLowerCase().replace(/\//g, '_').replace(/[^a-z_]/g, '')
                     setFormData({
                       ...formData,
                       ratings: {
