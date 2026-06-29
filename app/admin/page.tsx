@@ -115,33 +115,30 @@ export default function AdminDashboard() {
           pdf.setFontSize(9)
           pdf.setFont('Helvetica', 'normal')
 
-          // Ratings per niveau
-          if (evaluation.ratings) {
+          // Ratings per content area
+          if (evaluation.ratings && Object.keys(evaluation.ratings).length > 0) {
             pdf.setFont('Helvetica', 'bold')
-            pdf.text('Ratings (1-5):', margin, yPosition)
+            pdf.text('Waardering per onderdeel (1-5):', margin, yPosition)
             yPosition += 5
 
             pdf.setFont('Helvetica', 'normal')
             const ratingLabels = [
-              { key: 'general_information', label: 'General Info' },
+              { key: 'general_information', label: 'General Information' },
               { key: 'history', label: 'History' },
               { key: 'well_known_people', label: 'Well-known People' },
               { key: 'landmarks', label: 'Landmarks' },
               { key: 'culture', label: 'Culture' },
-              { key: 'flora_fauna', label: 'Flora/Fauna' },
+              { key: 'flora_fauna', label: 'Flora/Fauna/Landscapes' },
             ]
 
             ratingLabels.forEach(({ key, label }) => {
-              const ratingObj = (evaluation.ratings as any)?.[key]
-              if (ratingObj && typeof ratingObj === 'object') {
-                const values = Object.entries(ratingObj)
-                  .map(([niveau, val]) => `${niveau}:${val}`)
-                  .join(' | ')
-                pdf.text(`${label}: ${values}`, margin + 5, yPosition)
+              const ratingValue = (evaluation.ratings as any)?.[key]
+              if (ratingValue !== undefined && ratingValue !== null) {
+                pdf.text(`${label}: ${ratingValue}/5`, margin + 5, yPosition)
                 yPosition += 4
               }
             })
-            yPosition += 2
+            yPosition += 4
           }
 
           // Tekstvelden
