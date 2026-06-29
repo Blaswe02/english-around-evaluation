@@ -81,12 +81,17 @@ export default function Review({
               let total = 0
               let count = 0
               evaluations.forEach(e => {
-                const ratingObj = (e.ratings as any)?.[key]
-                if (ratingObj && typeof ratingObj === 'object') {
-                  Object.values(ratingObj).forEach(val => {
-                    total += (val as number) || 0
+                const ratingValue = (e.ratings as any)?.[key]
+                if (ratingValue !== undefined && ratingValue !== null) {
+                  if (typeof ratingValue === 'object') {
+                    Object.values(ratingValue).forEach(val => {
+                      total += (val as number) || 0
+                      count += 1
+                    })
+                  } else if (typeof ratingValue === 'number') {
+                    total += ratingValue
                     count += 1
-                  })
+                  }
                 }
               })
               const avg = count > 0 ? (total / count).toFixed(1) : 0
